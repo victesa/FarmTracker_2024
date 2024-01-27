@@ -1,11 +1,15 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
+    id("com.google.devtools.ksp")
+    id ("dagger.hilt.android.plugin")
+
 }
 
 android {
     namespace = "com.victorkirui.authentication"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 24
@@ -24,7 +28,7 @@ android {
         }
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.5.0"
     }
 
     buildFeatures{
@@ -47,6 +51,8 @@ dependencies {
     implementation(project(":core:designsystem"))
 
     compose()
+    firebase()
+    daggerHilt()
     implementation("com.github.JoelKanyi:KomposeCountryCodePicker:1.0.8")
 
     implementation("androidx.core:core-ktx:1.9.0")

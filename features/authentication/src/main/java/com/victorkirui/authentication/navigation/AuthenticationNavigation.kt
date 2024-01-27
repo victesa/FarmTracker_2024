@@ -5,8 +5,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.victorkirui.authentication.ui.EmailSignInRoute
-import com.victorkirui.authentication.ui.EmailSignUpRoute
+import com.victorkirui.authentication.ui.emailSignIn.EmailSignInRoute
+import com.victorkirui.authentication.ui.emailSignUp.EmailSignUpRoute
 import com.victorkirui.authentication.ui.OnBoardingRoute
 import com.victorkirui.authentication.ui.PhoneAuthenticationRoute
 import com.victorkirui.authentication.ui.SignUpOptionsRoute
@@ -20,9 +20,9 @@ const val phoneAuthenticationRoute = "PhoneAuthenticationScreen"
 fun NavGraphBuilder.authenticationGraph(context: Context,
                                         onSignUpClicked:()-> Unit, onSignInClicked:()-> Unit,
                                         navigateToEmailSignUpScreen:() -> Unit,
-                                        popBackStack:() -> Unit,
                                         navigateToPhoneAuthenticationScreen:() -> Unit,
-                                        navigateToEmailSignInScreen:() -> Unit){
+                                        navigateToEmailSignInScreen:() -> Unit,
+                                        navigateToProfileGraph:() -> Unit){
     navigation(route = "auth", startDestination = onBoardingRoute){
         composable(route = onBoardingRoute){
             OnBoardingRoute(context = context, onSignInClicked = onSignInClicked, onSignUpClicked = onSignUpClicked)
@@ -41,7 +41,7 @@ fun NavGraphBuilder.authenticationGraph(context: Context,
         }
         
         composable(route = emailSignUpRoute){
-            EmailSignUpRoute(context = context)
+            EmailSignUpRoute(context = context, navigateToProfileGraph = navigateToProfileGraph)
         }
         
         composable(route = phoneAuthenticationRoute){

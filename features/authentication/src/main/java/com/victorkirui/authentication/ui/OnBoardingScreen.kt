@@ -2,6 +2,7 @@ package com.victorkirui.authentication.ui
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.Resources
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,8 @@ import androidx.compose.ui.unit.sp
 import com.victorkirui.authentication.R
 import com.victorkirui.ui.IllustratorLogo
 import com.victorkirui.ui.TitleParagraph
+import com.victorkirui.ui.components.GreenButton
+import java.io.IOException
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
@@ -103,11 +106,8 @@ fun OnBoardingButtons(height: Dp, onSignInClicked: () -> Unit, onSignUpClicked: 
         .fillMaxWidth()
         .fillMaxHeight(),
         verticalArrangement = Arrangement.Center) {
-        Button(onClick = onSignInClicked, modifier = Modifier
-            .fillMaxWidth()
-            .height(height)) {
-            Text(text = "Sign In")
-        }
+        GreenButton(onClick = onSignInClicked,
+            fontSize = 16.sp, text = "Sign In")
 
         Spacer(modifier = Modifier.height(24.dp))
 

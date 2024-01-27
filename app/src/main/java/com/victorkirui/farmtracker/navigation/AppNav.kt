@@ -10,6 +10,8 @@ import com.victorkirui.authentication.navigation.navigateToEmailSignUpScreen
 import com.victorkirui.authentication.navigation.navigateToPhoneAuthenticationScreen
 import com.victorkirui.authentication.navigation.navigateToSignUpOptionsScreen
 import com.victorkirui.authentication.navigation.onBoardingRoute
+import com.victorkirui.profile.navigation.navigateToProfileGraph
+import com.victorkirui.profile.navigation.profileGraph
 
 @Composable
 fun AppNav(context: Context){
@@ -21,6 +23,9 @@ fun AppNav(context: Context){
             onSignInClicked = navController::navigateToEmailSignInScreen,
             navigateToEmailSignInScreen = navController::navigateToEmailSignInScreen,
             navigateToEmailSignUpScreen = navController::navigateToEmailSignUpScreen,
-            navigateToPhoneAuthenticationScreen = navController::navigateToPhoneAuthenticationScreen)
+            navigateToPhoneAuthenticationScreen = navController::navigateToPhoneAuthenticationScreen,
+            navigateToProfileGraph = navController::navigateToProfileGraph)
+
+        profileGraph(context)
     }
 }

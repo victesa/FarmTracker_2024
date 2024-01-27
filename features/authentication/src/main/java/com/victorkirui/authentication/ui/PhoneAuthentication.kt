@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -26,10 +25,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.joelkanyi.jcomposecountrycodepicker.component.KomposeCountryCodePicker
 import com.victorkirui.ui.IllustratorLogo
+import com.victorkirui.ui.components.GreenButton
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
@@ -118,7 +117,8 @@ fun PhoneAuthenticationMedium(){
                 )
 
                 Text(text = "International carrier charges may apply", fontSize = 14.sp,
-                    color = Color.DarkGray, modifier = Modifier.fillMaxWidth()
+                    color = Color.DarkGray, modifier = Modifier
+                        .fillMaxWidth()
                         .padding(top = 17.dp),
                     textAlign = TextAlign.Center)
             }
@@ -132,11 +132,7 @@ fun PhoneSignInButton(fontSize: TextUnit){
     Column(modifier = Modifier
         .fillMaxHeight(.6f)
         .fillMaxWidth(), verticalArrangement = Arrangement.Center) {
-        Button(onClick = { /*TODO*/ }, modifier = Modifier
-            .fillMaxWidth()
-            .height(55.dp)) {
-            Text(text = "Create Account", fontSize = fontSize)
-        }
+        GreenButton(onClick = { /*TODO*/ }, fontSize = fontSize, text = "Sign Up")
     }
 
 }

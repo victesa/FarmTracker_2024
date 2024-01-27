@@ -1,8 +1,9 @@
-package com.victorkirui.authentication.ui
+package com.victorkirui.authentication.ui.emailSignIn
 
 import android.app.Activity
 import android.content.Context
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
@@ -30,52 +30,93 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.victorkirui.authentication.ui.component.EmailTextField
+import com.victorkirui.authentication.ui.component.PasswordTextField
+import com.victorkirui.ui.components.GreenButton
+
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
-internal fun EmailSignInRoute(context: Context, navigateToPhoneAuthenticationScreen: () -> Unit, navigateToSignUpEmail:() -> Unit){
+internal fun EmailSignInRoute(context: Context,
+                              navigateToPhoneAuthenticationScreen: () -> Unit,
+                              navigateToSignUpEmail:() -> Unit,
+                              viewModel: EmailSignInViewModel = hiltViewModel()){
+
+    val emailSignInState by viewModel.uiState.collectAsState()
+    val emailSignInEvent = viewModel::onEvent
     val windowWidthSizeClass = calculateWindowSizeClass(activity = context as Activity).widthSizeClass
 
-    EmailSignInScreen(windowWidthSizeClass = windowWidthSizeClass, navigateToPhoneAuthenticationScreen = navigateToPhoneAuthenticationScreen, googleSignIn = {}, navigateToSignUpEmail = navigateToSignUpEmail)
+    EmailSignInScreen(windowWidthSizeClass = windowWidthSizeClass,
+        navigateToPhoneAuthenticationScreen = navigateToPhoneAuthenticationScreen,
+        googleSignIn = {}, navigateToSignUpEmail = navigateToSignUpEmail,
+        emailValue = emailSignInState.emailAddress, onEmailValueChanged = {
+            emailSignInEvent(
+                EmailSignInEvent.EnteredEmailAddress(it)
+        )},
+        passwordValue = emailSignInState.password, onPasswordValueChanged = {
+            emailSignInEvent(EmailSignInEvent.EnteredPassword(it))
+        },
+        icon = emailSignInState.drawable, onIconClicked = {
+            emailSignInEvent(EmailSignInEvent.ChangePasswordVisibility)},
+        visualTransformation = emailSignInState.visualTransformation,
+        onSignInClicked = {emailSignInEvent(
+            EmailSignInEvent.SignInUser
+        )})
 }
 
 @Composable
 internal fun EmailSignInScreen(windowWidthSizeClass: WindowWidthSizeClass,
                                navigateToPhoneAuthenticationScreen: () -> Unit,
                                navigateToSignUpEmail:() -> Unit,
-                               googleSignIn:() -> Unit){
+                               googleSignIn:() -> Unit,
+                               onSignInClicked: () -> Unit,
+                               emailValue: String, onEmailValueChanged:(String) -> Unit,
+                               passwordValue: String, onPasswordValueChanged:(String) -> Unit,
+                               icon: Int, onIconClicked: () -> Unit, visualTransformation: VisualTransformation){
     when(windowWidthSizeClass){
         WindowWidthSizeClass.Compact -> {
-            EmailSignInCompact(navigateToPhoneAuthenticationScreen, googleSignIn, navigateToSignUpEmail)
+            EmailSignInCompact(navigateToPhoneAuthenticationScreen, googleSignIn, navigateToSignUpEmail,
+                emailValue = emailValue, onEmailValueChanged = onEmailValueChanged,
+                passwordValue = passwordValue, onPasswordValueChanged = onPasswordValueChanged,
+                icon = icon, onIconClicked = onIconClicked, visualTransformation = visualTransformation, onSignInClicked = onSignInClicked)
         }
 
         WindowWidthSizeClass.Medium ->{
-            EmailSignInMedium(navigateToPhoneAuthenticationScreen, googleSignIn, navigateToSignUpEmail)
+            EmailSignInMedium(navigateToPhoneAuthenticationScreen, googleSignIn, navigateToSignUpEmail,
+                emailValue = emailValue, onEmailValueChanged = onEmailValueChanged,
+                passwordValue = passwordValue, onPasswordValueChanged = onPasswordValueChanged,
+                icon = icon, onIconClicked = onIconClicked, visualTransformation = visualTransformation, onSignInClicked = onSignInClicked)
         }
     }
 }
 
 @Composable
 fun EmailSignInCompact(navigateToPhoneAuthenticationScreen: () -> Unit,
-                       googleSignIn:() -> Unit, navigateToSignUpEmail:() -> Unit){
+                       googleSignIn:() -> Unit, navigateToSignUpEmail:() -> Unit,
+                       emailValue: String, onEmailValueChanged:(String) -> Unit,
+                       passwordValue: String, onPasswordValueChanged:(String) -> Unit,
+                       onSignInClicked: () -> Unit,
+                       icon: Int, onIconClicked: () -> Unit, visualTransformation: VisualTransformation){
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(horizontal = 16.dp)) {
@@ -87,7 +128,10 @@ fun EmailSignInCompact(navigateToPhoneAuthenticationScreen: () -> Unit,
 
         Spacer(modifier = Modifier.height(48.dp))
 
-        SignInMainComponentsColumn(fontSize = 16.sp, spacerHeight = 24.dp)
+        SignInMainComponentsColumn(fontSize = 16.sp, spacerHeight = 24.dp,
+            emailValue = emailValue, onEmailValueChanged = onEmailValueChanged,
+            passwordValue = passwordValue, onPasswordValueChanged = onPasswordValueChanged,
+            icon = icon, onIconClicked = onIconClicked, visualTransformation = visualTransformation, onSignInClicked = onSignInClicked)
 
         OrWithText(fontSize = 16.sp)
 
@@ -101,7 +145,11 @@ fun EmailSignInCompact(navigateToPhoneAuthenticationScreen: () -> Unit,
 
 @Composable
 fun EmailSignInMedium(navigateToPhoneAuthenticationScreen: () -> Unit,
-                      googleSignIn:() -> Unit, navigateToSignUpEmail:() -> Unit){
+                      googleSignIn:() -> Unit, navigateToSignUpEmail:() -> Unit,
+                      emailValue: String, onEmailValueChanged:(String) -> Unit,
+                      passwordValue: String, onPasswordValueChanged:(String) -> Unit,
+                      icon: Int, onIconClicked: () -> Unit,visualTransformation: VisualTransformation,
+                      onSignInClicked: () -> Unit){
     Text(text = "Welcome", fontSize = 40.sp, modifier = Modifier
         .padding(top = 56.dp)
         .padding(horizontal = 24.dp),
@@ -115,7 +163,10 @@ fun EmailSignInMedium(navigateToPhoneAuthenticationScreen: () -> Unit,
         Spacer(modifier = Modifier.height(48.dp))
 
         Column(modifier = Modifier.fillMaxWidth(.7f)) {
-            SignInMainComponentsColumn(fontSize = 17.sp, spacerHeight = 40.dp)
+            SignInMainComponentsColumn(fontSize = 17.sp, spacerHeight = 40.dp,
+                emailValue = emailValue, onEmailValueChanged = onEmailValueChanged,
+                passwordValue = passwordValue, onPasswordValueChanged = onPasswordValueChanged,
+                icon = icon, onIconClicked = onIconClicked, visualTransformation = visualTransformation, onSignInClicked = onSignInClicked)
 
             OrWithText(fontSize = 17.sp)
 
@@ -158,17 +209,24 @@ fun SignUpOptionText(fontSize: TextUnit, onClick: () -> Unit){
 }
 
 @Composable
-fun SignInMainComponentsColumn(fontSize: TextUnit, spacerHeight: Dp){
+fun SignInMainComponentsColumn(
+    emailValue: String, onEmailValueChanged:(String) -> Unit,
+    passwordValue: String, onPasswordValueChanged:(String) -> Unit,
+    icon: Int, onIconClicked: () -> Unit,
+    visualTransformation: VisualTransformation,
+    fontSize: TextUnit, spacerHeight: Dp,
+    onSignInClicked: () -> Unit){
     Column(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight(.65f),
         horizontalAlignment = Alignment.End) {
 
-        EmailTextField()
+        EmailTextField(value = emailValue, onValueChange = onEmailValueChanged)
 
         Spacer(modifier = Modifier.height(spacerHeight))
 
-        PasswordTextField()
+        PasswordTextField(value = passwordValue, onValueChange = onPasswordValueChanged, icon = icon,
+            onIconClicked = onIconClicked, visualTransformation = visualTransformation, placeholderText = "Password")
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -176,53 +234,17 @@ fun SignInMainComponentsColumn(fontSize: TextUnit, spacerHeight: Dp){
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        ButtonSignUp(fontSize = 16.sp)
+        GreenButton(onClick = onSignInClicked, fontSize = 16.sp, text = "Sign In" )
     }
 }
 
-@Composable
-fun EmailTextField(){
-    OutlinedTextField(value = "", onValueChange = {}, modifier = Modifier.fillMaxWidth(),
-        colors = OutlinedTextFieldDefaults.colors(unfocusedContainerColor = Color.White, focusedContainerColor = Color.White),
-        placeholder = {
-            Text(text = "Email Address")
-        }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email,
-            imeAction = ImeAction.Next),
-        keyboardActions = KeyboardActions(onNext = {
-            //TODO
-        })
-    )
-}
 
-@Composable
-fun PasswordTextField(){
-    OutlinedTextField(value = "", onValueChange = {}, modifier = Modifier.fillMaxWidth(),
-        colors = OutlinedTextFieldDefaults.colors(unfocusedContainerColor = Color.White, focusedContainerColor = Color.White),
-        placeholder = {
-            Text(text = "Password")
-        }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text,
-            imeAction = ImeAction.Next),
-        keyboardActions = KeyboardActions(onNext = {
-            //TODO
-        }), visualTransformation = PasswordVisualTransformation(), //trailingIcon = {
-        //Icon(painter = painterResource(id = R.drawable.baseline_visibility_24), contentDescription = "Show Password")
-        //}
-    )
-}
+
 
 @Composable
 fun ForgotPasswordButton(fontSize: TextUnit){
     TextButton(onClick = { /*TODO*/ }) {
         Text(text = "Forgot Password?", fontSize = fontSize, color = Color.Black)
-    }
-}
-
-@Composable
-fun ButtonSignUp(fontSize: TextUnit){
-    Button(onClick = { /*TODO*/ }, modifier = Modifier
-        .fillMaxWidth()
-        .height(55.dp)) {
-        Text(text = "Log in", fontSize = fontSize)
     }
 }
 
@@ -258,7 +280,7 @@ fun EmailSignInCompactPreview(){
     Column(modifier = Modifier
         .fillMaxSize()
         .background(Color.White)) {
-        EmailSignInCompact({}, {}, {})
+        //EmailSignInCompact({}, {}, {})
     }
 
 }
@@ -270,7 +292,7 @@ fun EmailSignInMediumPreview(){
         .fillMaxSize()
         .background(Color.White)) {
 
-        EmailSignInMedium({}, {}, {})
+        //EmailSignInMedium({}, {}, {})
 
     }
 }
