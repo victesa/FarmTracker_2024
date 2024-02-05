@@ -1,7 +1,6 @@
-package com.victorkirui.profile.ui.animalSelection
+package com.victorkirui.profile.ui.animalSelection.screen
 
-import android.app.Activity
-import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,41 +12,50 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.victorkirui.profile.ui.animalSelection.ProfileViewModel
+import com.victorkirui.profile.ui.animalSelection.component.ShimmerListItem
 import com.victorkirui.ui.components.GreenButton
 
 
-
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
-fun AnimalSelectionRoute(context: Context){
-    val windowWidthSizeClass = calculateWindowSizeClass(activity = context as Activity).widthSizeClass
+fun AnimalSelectionRoute(windowWidthSizeClass: WindowWidthSizeClass,
+                         viewModel: ProfileViewModel = hiltViewModel(),
+                         navigateToAddAnimalOptions:() -> Unit){
+    val context = LocalContext.current
+    AnimalSelectionScreen(windowWidthSizeClass = windowWidthSizeClass, onClick = {
+        if (viewModel.onNextClicked()){
+            navigateToAddAnimalOptions()
+        }else{
+            Toast.makeText(context, "Please Select At least one animal", Toast.LENGTH_SHORT).show()
+        }
 
-    AnimalSelectionScreen(windowWidthSizeClass = windowWidthSizeClass)
+    }, showSnackBar = !viewModel.isAnimalSelected)
 }
 
 @Composable
-internal fun AnimalSelectionScreen(windowWidthSizeClass: WindowWidthSizeClass){
+internal fun AnimalSelectionScreen(windowWidthSizeClass: WindowWidthSizeClass,
+                                   onClick: () -> Unit,
+                                   showSnackBar: Boolean){
     when(windowWidthSizeClass){
         WindowWidthSizeClass.Compact ->{
-            AnimalSelectionCompact( onClick = {})
+            AnimalSelectionCompact( onClick = onClick, showSnackBar = showSnackBar)
         }
 
         WindowWidthSizeClass.Medium ->{
-            AnimalSelectionMedium(onClick = {})
+            AnimalSelectionMedium(onClick = onClick, showSnackBar = showSnackBar)
         }
 
     }
@@ -55,9 +63,11 @@ internal fun AnimalSelectionScreen(windowWidthSizeClass: WindowWidthSizeClass){
 }
 
 
+
+
 @Composable
 internal fun AnimalSelectionCompact(viewModel: ProfileViewModel = hiltViewModel(),
-                                    onClick:() -> Unit){
+                                    onClick:() -> Unit, showSnackBar: Boolean){
     Column(modifier = Modifier
         .fillMaxSize()
         .background(Color.White)
@@ -91,7 +101,6 @@ internal fun AnimalSelectionCompact(viewModel: ProfileViewModel = hiltViewModel(
 
             }
         }
-
         Column(modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(),
@@ -107,7 +116,8 @@ internal fun AnimalSelectionCompact(viewModel: ProfileViewModel = hiltViewModel(
 
 @Composable
 internal fun AnimalSelectionMedium(onClick:() -> Unit,
-                                   viewModel: ProfileViewModel = hiltViewModel()){
+                                   viewModel: ProfileViewModel = hiltViewModel(),
+                                   showSnackBar: Boolean){
     val animalList = viewModel.uiState.collectAsState()
     Column(modifier = Modifier
         .fillMaxSize()
@@ -145,6 +155,7 @@ internal fun AnimalSelectionMedium(onClick:() -> Unit,
                     onClick = {viewModel.animalClicked(it)}
                 )
             }}
+
 
         Column(modifier = Modifier
             .fillMaxWidth(.7f)

@@ -1,5 +1,8 @@
-package com.victorkirui.profile.ui.addAnimalData
+package com.victorkirui.profile.ui.animalSelection.screen
 
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -18,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -25,52 +30,66 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.victorkirui.profile.R
-import com.victorkirui.profile.ui.addAnimalData.components.WhiteButton
+import com.victorkirui.profile.ui.animalSelection.AddAnimalDataViewModel
+import com.victorkirui.profile.ui.animalSelection.component.WhiteButton
 import com.victorkirui.ui.components.GreenButton
 
 @Composable
-internal fun AddAnimalDataOptionRoute(windowWidthSizeClass: WindowWidthSizeClass){
+internal fun AddAnimalDataOptionRoute(windowWidthSizeClass: WindowWidthSizeClass,
+                                      onNavigateToImportAnimalInfoScreen: () -> Unit){
+    AddAnimalDataOptionScreen(windowWidthSizeClass = windowWidthSizeClass,
+        onNavigateToImportAnimalInfoScreen = onNavigateToImportAnimalInfoScreen)
 
 }
 
 @Composable
-internal fun AddAnimalDataOptionScreen(windowWidthSizeClass: WindowWidthSizeClass){
+internal fun AddAnimalDataOptionScreen(windowWidthSizeClass: WindowWidthSizeClass,
+                                       onNavigateToImportAnimalInfoScreen: () -> Unit){
     when(windowWidthSizeClass){
         WindowWidthSizeClass.Compact ->{
-            AddAnimalDataOptionCompact()
+            AddAnimalDataOptionCompact(onNavigateToImportAnimalInfoScreen = onNavigateToImportAnimalInfoScreen)
         }
 
         WindowWidthSizeClass.Medium ->{
-            AddAnimalDataOptionMedium()
+            AddAnimalDataOptionMedium(onNavigateToImportAnimalInfoScreen = onNavigateToImportAnimalInfoScreen)
         }
     }
 
 }
 
 @Composable
-fun AddAnimalDataOptionCompact(){
+fun AddAnimalDataOptionCompact(onNavigateToImportAnimalInfoScreen: () -> Unit){
     Column(modifier = Modifier
         .fillMaxSize()
-        .padding(horizontal = 24.dp)
-        .background(MaterialTheme.colorScheme.secondaryContainer)
+        .padding(horizontal = 32.dp)
+        .padding(bottom = 16.dp)
+        .background(
+            MaterialTheme.colorScheme.secondaryContainer,
+            shape = RoundedCornerShape(32.dp)
+        )
         .padding(10.dp)) {
 
         TopTextColumn(headerFontSize = 24.sp, bodyFontSize = 16.sp)
 
         ExportIllustrator()
 
-        AddAnimalButtonOptions(fontSize = 16.sp)
+        AddAnimalButtonOptions(fontSize = 16.sp, onNavigateToImportAnimalInfoScreen = onNavigateToImportAnimalInfoScreen)
 
     }
 }
 
 @Composable
-fun AddAnimalDataOptionMedium(){
+fun AddAnimalDataOptionMedium(onNavigateToImportAnimalInfoScreen: () -> Unit){
     Column(modifier = Modifier
         .fillMaxSize()
-        .padding(horizontal = 24.dp)
-        .background(MaterialTheme.colorScheme.secondaryContainer),
+        .padding(horizontal = 32.dp)
+        .padding(bottom = 16.dp)
+        .background(
+            MaterialTheme.colorScheme.secondaryContainer,
+            shape = RoundedCornerShape(32.dp)
+        ),
         horizontalAlignment = Alignment.CenterHorizontally) {
 
         Column(modifier = Modifier
@@ -80,7 +99,7 @@ fun AddAnimalDataOptionMedium(){
 
             ExportIllustrator()
 
-            AddAnimalButtonOptions(fontSize = 17.sp)
+            AddAnimalButtonOptions(fontSize = 17.sp, onNavigateToImportAnimalInfoScreen = onNavigateToImportAnimalInfoScreen)
         }
 
     }
@@ -101,6 +120,7 @@ fun TopTextColumn(headerFontSize: TextUnit, bodyFontSize: TextUnit){
     }
 }
 
+
 @Composable
 fun ExportIllustrator(){
     Column(modifier = Modifier
@@ -114,12 +134,25 @@ fun ExportIllustrator(){
 }
 
 @Composable
-fun AddAnimalButtonOptions(fontSize: TextUnit){
+fun AddAnimalButtonOptions(fontSize: TextUnit,
+                           viewModel: AddAnimalDataViewModel = hiltViewModel(),
+                           onNavigateToImportAnimalInfoScreen: () -> Unit){
+    val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = {
+            viewModel.updateURI(it!!)
+            Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
+        })
+
     Column(modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center) {
-        GreenButton(onClick = { /*TODO*/ }, fontSize = fontSize, text = "ImportData")
+        GreenButton(onClick = {
+            launcher.launch("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            onNavigateToImportAnimalInfoScreen()
+        }, fontSize = fontSize, text = "ImportData")
         Spacer(modifier = Modifier.height(16.dp))
-        WhiteButton(onClick = { /*TODO*/ }, text = "Add Data Manually", fontSize = fontSize)
+        WhiteButton(onClick = {  }, text = "Add Data Manually", fontSize = fontSize)
     }
 }
 
@@ -131,7 +164,7 @@ fun Preview(){
         .fillMaxSize()) {
 
     }
-    AddAnimalDataOptionCompact()
+    AddAnimalDataOptionCompact(){}
 }
 
 @Composable
@@ -140,6 +173,6 @@ fun Preview2(){
     Column(modifier = Modifier
         .fillMaxSize()
         .background(Color.White)) {
-        AddAnimalDataOptionMedium()
+        AddAnimalDataOptionMedium(){}
     }
 }

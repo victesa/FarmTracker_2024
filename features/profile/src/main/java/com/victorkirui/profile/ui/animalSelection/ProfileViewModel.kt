@@ -1,7 +1,11 @@
 package com.victorkirui.profile.ui.animalSelection
 
 import android.app.Application
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.victorkirui.profile.data.AnimalNames
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,8 +43,14 @@ class ProfileViewModel @Inject constructor(private val application: Application)
 
     val uiState: StateFlow<List<AnimalState>> = _uiState.asStateFlow()
 
+    private val animalSelected = mutableListOf<String>()
 
     fun animalClicked(id: Int){
+        if (!uiState.value[id].isSelected){
+            animalSelected.add(uiState.value[id].name)
+        }else{
+            animalSelected.remove(uiState.value[id].name)
+        }
         _uiState.update {
             it.mapIndexed{j, item->
                 if (j == id){
@@ -54,6 +64,18 @@ class ProfileViewModel @Inject constructor(private val application: Application)
             }
     }
 
+    var isAnimalSelected by mutableStateOf(true)
+
+
+    fun onNextClicked(): Boolean{
+        return if (animalSelected.isNotEmpty()){
+            isAnimalSelected = true
+            true
+        }else{
+            isAnimalSelected = false
+            false
+        }
+    }
 
 
 

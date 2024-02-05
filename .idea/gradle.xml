@@ -14,10 +14,12 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core/database" />
             <option value="$PROJECT_DIR$/core/designsystem" />
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/features" />
             <option value="$PROJECT_DIR$/features/authentication" />
+            <option value="$PROJECT_DIR$/features/home" />
             <option value="$PROJECT_DIR$/features/profile" />
             <option value="$PROJECT_DIR$/processor" />
           </set>

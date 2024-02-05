@@ -13,8 +13,8 @@ object Dependencies {
     const val composeRuntime = "androidx.compose.runtime:runtime:${Versions.compose}"
     const val composeActivity = "androidx.activity:activity-compose:1.8.0"
     const val composeBom = "androidx.compose:compose-bom:2023.03.00"
-    const val composeJunit4Test = "androidx.compose.ui:ui-test-junit4"
-    const val composeDebug = "androidx.compose.ui:ui-test-manifest"
+    const val composeJunit4Test = "androidx.compose.ui:ui-test-junit4:${Versions.compose}"
+    const val composeDebug = "androidx.compose.ui:ui-test-manifest:${Versions.compose}"
     const val composeFragmentNavigation = "androidx.navigation:navigation-fragment-ktx:${Versions.nav_version}"
     const val composeUiNavigation = "androidx.navigation:navigation-ui-ktx:${Versions.nav_version}"
     const val composeNavigation = "androidx.navigation:navigation-compose:${Versions.nav_version}"
@@ -46,7 +46,6 @@ object Dependencies {
     //Dagger - Hilt
     const val daggerHiltAndroid = "com.google.dagger:hilt-android:${Versions.daggerHiltAndroidVersion}"
     const val daggerKaptCompiler = "com.google.dagger:hilt-android-compiler:${Versions.kaptCompiler}"
-    const val daggerViewModel = "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.daggerViewModel}"
     const val hiltCompilerDependency = "androidx.hilt:hilt-compiler:${Versions.hiltCompiler}"
     const val hiltNavigationCompose = "androidx.hilt:hilt-navigation-compose:${Versions.hiltNavigation}"
 }
@@ -54,7 +53,6 @@ object Dependencies {
 fun DependencyHandler.daggerHilt(){
     implementation(Dependencies.daggerHiltAndroid)
     ksp(Dependencies.daggerKaptCompiler)
-    implementation(Dependencies.daggerViewModel)
     implementation(Dependencies.hiltCompilerDependency)
     implementation(Dependencies.hiltNavigationCompose)
 }

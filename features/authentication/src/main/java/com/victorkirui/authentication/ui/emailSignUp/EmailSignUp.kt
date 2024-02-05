@@ -1,9 +1,6 @@
 package com.victorkirui.authentication.ui.emailSignUp
 
-import android.app.Activity
-import android.content.Context
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,9 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -28,7 +23,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,52 +35,46 @@ import com.victorkirui.ui.components.GreenButton
 import com.victorkirui.ui.components.IndeterminateProgressIndicator
 
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     @Composable
-    internal fun EmailSignUpRoute(context: Context, viewModel: EmailSignUpViewModel = hiltViewModel(),
-                                  navigateToProfileGraph:() -> Unit){
+    internal fun EmailSignUpRoute(viewModel: EmailSignUpViewModel = hiltViewModel(),
+                                  navigateToProfileGraph:() -> Unit,
+                                  windowWidthSizeClass: WindowWidthSizeClass){
 
-        val windowWidthSizeClass = calculateWindowSizeClass(activity = context as Activity).widthSizeClass
         val emailSignUpState = viewModel.uiState.collectAsState()
         val emailSignUpEvent = viewModel::onEvent
 
-    if (!emailSignUpState.value.signUpComplete){
-        EmailSignUpScreen(windowWidthSizeClass = windowWidthSizeClass,
-            emailValue = emailSignUpState.value.emailAddress, onEmailValueChange = {
-                emailSignUpEvent(
-                    EmailSignUpEvent.EnteredEmailAddress(it)
-                )
-            },
-            passwordValue = emailSignUpState.value.password, onPasswordValueChange = {
-                emailSignUpEvent(
-                    EmailSignUpEvent.EnteredPassword(it)
-                )
-            },
-            confirmPasswordValue = emailSignUpState.value.confirmPassword, onConfirmPasswordValueChange = {
-                emailSignUpEvent(
-                    EmailSignUpEvent.EnteredConfirmPassword(it)
-                )
-            },
-            visualTransformationOne = emailSignUpState.value.visualTransformationOne,
-            visualTransformationTwo = emailSignUpState.value.visualTransformationTwo,
-            iconOne = emailSignUpState.value.drawableOne, onIconOneClicked = {
-                emailSignUpEvent(
-                    EmailSignUpEvent.ChangePasswordVisibility
-                )
-            },
-            iconTwo = emailSignUpState.value.drawableTwo, onIconTwoClicked = {
-                emailSignUpEvent(
-                    EmailSignUpEvent.ChangeConfirmPasswordVisibility
-                )
-            },
-            onSignUpUser = {
-                emailSignUpEvent(
-                    EmailSignUpEvent.signUpUser
-                ) }, showProgressIndicator = emailSignUpState.value.showProgressDialog)
-    }else{
-        navigateToProfileGraph()
-        viewModel.showProgressDialogFalse()
-    }
+        if (!emailSignUpState.value.signUpComplete) {
+            EmailSignUpScreen(windowWidthSizeClass = windowWidthSizeClass,
+                emailValue = emailSignUpState.value.emailAddress,
+                onEmailValueChange = {
+                    emailSignUpEvent(EmailSignUpEvent.EnteredEmailAddress(it))
+                },
+                passwordValue = emailSignUpState.value.password,
+                onPasswordValueChange = {
+                    emailSignUpEvent(EmailSignUpEvent.EnteredPassword(it))
+                },
+                confirmPasswordValue = emailSignUpState.value.confirmPassword,
+                onConfirmPasswordValueChange = {
+                    emailSignUpEvent(EmailSignUpEvent.EnteredConfirmPassword(it))
+                },
+                visualTransformationOne = emailSignUpState.value.visualTransformationOne,
+                visualTransformationTwo = emailSignUpState.value.visualTransformationTwo,
+                iconOne = emailSignUpState.value.drawableOne,
+                onIconOneClicked = {
+                    emailSignUpEvent(EmailSignUpEvent.ChangePasswordVisibility)
+                },
+                iconTwo = emailSignUpState.value.drawableTwo, onIconTwoClicked = {
+                    emailSignUpEvent(
+                        EmailSignUpEvent.ChangeConfirmPasswordVisibility
+                    )
+                },
+                onSignUpUser = {
+                    emailSignUpEvent(EmailSignUpEvent.signUpUser)
+                }, showProgressIndicator = emailSignUpState.value.showProgressDialog)
+        }else{
+            navigateToProfileGraph()
+            viewModel.showProgressDialogFalse()
+        }
 
 
     }
@@ -119,79 +107,134 @@ import com.victorkirui.ui.components.IndeterminateProgressIndicator
                     visualTransformationOne = visualTransformationOne, visualTransformationTwo = visualTransformationTwo,
                     iconOne = iconOne, onIconOneClicked = onIconOneClicked,
                     iconTwo = iconTwo, onIconTwoClicked = onIconTwoClicked,
-                    onSignUpUser = onSignUpUser)
+                    onSignUpUser = onSignUpUser,
+                    showProgressIndicator = showProgressIndicator)
             }
         }
     }
 
     @Composable
-    fun EmailSignUpCompactScreen(emailValue: String, onEmailValueChange: (String) -> Unit,
-                                 passwordValue: String, onPasswordValueChange: (String) -> Unit,
-                                 confirmPasswordValue: String, onConfirmPasswordValueChange: (String) -> Unit,
-                                 visualTransformationOne: VisualTransformation, visualTransformationTwo: VisualTransformation,
-                                 iconOne: Int, onIconOneClicked:() -> Unit,
-                                 iconTwo: Int, onIconTwoClicked:() -> Unit,
-                                 onSignUpUser: () -> Unit, showProgressIndicator: Boolean){
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+    fun EmailSignUpCompactScreen(emailValue: String,
+                                 onEmailValueChange: (String) -> Unit,
+                                 passwordValue: String,
+                                 onPasswordValueChange: (String) -> Unit,
+                                 confirmPasswordValue: String,
+                                 onConfirmPasswordValueChange: (String) -> Unit,
+                                 visualTransformationOne: VisualTransformation,
+                                 visualTransformationTwo: VisualTransformation,
+                                 iconOne: Int,
+                                 onIconOneClicked:() -> Unit,
+                                 iconTwo: Int,
+                                 onIconTwoClicked:() -> Unit,
+                                 onSignUpUser: () -> Unit,
+                                 showProgressIndicator: Boolean){
+        Box(modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center){
             if (showProgressIndicator){
                 Column(modifier = Modifier
                     .fillMaxSize()
                     .background(color = Color.White)
-                    .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 12.dp)) {
-                    TintedColumn(fontSize = 16.sp, horizontalPadding = 10.dp,
-                        emailValue = emailValue, onEmailValueChange = onEmailValueChange,
-                        passwordValue = passwordValue, onPasswordValueChange = onPasswordValueChange,
-                        confirmPasswordValue = confirmPasswordValue, onConfirmPasswordValueChange = onConfirmPasswordValueChange,
-                        visualTransformationOne = visualTransformationOne, visualTransformationTwo = visualTransformationTwo,
-                        iconOne = iconOne, onIconOneClicked = onIconOneClicked,
-                        iconTwo = iconTwo, onIconTwoClicked = onIconTwoClicked,
+                    .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 12.dp)
+                    .background(
+                        MaterialTheme.colorScheme.secondaryContainer,
+                        shape = RoundedCornerShape(32.dp)
+                    )
+                    .padding(10.dp)) {
+                    TintedColumn(fontSize = 16.sp,
+                        emailValue = emailValue,
+                        onEmailValueChange = onEmailValueChange,
+                        passwordValue = passwordValue,
+                        onPasswordValueChange = onPasswordValueChange,
+                        confirmPasswordValue = confirmPasswordValue,
+                        onConfirmPasswordValueChange = onConfirmPasswordValueChange,
+                        visualTransformationOne = visualTransformationOne,
+                        visualTransformationTwo = visualTransformationTwo,
+                        iconOne = iconOne,
+                        onIconOneClicked = onIconOneClicked,
+                        iconTwo = iconTwo,
+                        onIconTwoClicked = onIconTwoClicked,
                         onClick = onSignUpUser)
                 }
 
-                IndeterminateProgressIndicator()
+                IndeterminateProgressIndicator("Signing Up", 16.sp)
             }else{
                 Column(modifier = Modifier
                     .fillMaxSize()
                     .background(color = Color.White)
-                    .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 12.dp)) {
-                    TintedColumn(fontSize = 16.sp, horizontalPadding = 10.dp,
-                        emailValue = emailValue, onEmailValueChange = onEmailValueChange,
-                        passwordValue = passwordValue, onPasswordValueChange = onPasswordValueChange,
-                        confirmPasswordValue = confirmPasswordValue, onConfirmPasswordValueChange = onConfirmPasswordValueChange,
-                        visualTransformationOne = visualTransformationOne, visualTransformationTwo = visualTransformationTwo,
-                        iconOne = iconOne, onIconOneClicked = onIconOneClicked,
-                        iconTwo = iconTwo, onIconTwoClicked = onIconTwoClicked,
+                    .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 12.dp)
+                    .background(
+                        MaterialTheme.colorScheme.secondaryContainer,
+                        shape = RoundedCornerShape(32.dp)
+                    )
+                    .padding(10.dp)) {
+
+                    TintedColumn(fontSize = 16.sp,
+                        emailValue = emailValue,
+                        onEmailValueChange = onEmailValueChange,
+                        passwordValue = passwordValue,
+                        onPasswordValueChange = onPasswordValueChange,
+                        confirmPasswordValue = confirmPasswordValue,
+                        onConfirmPasswordValueChange = onConfirmPasswordValueChange,
+                        visualTransformationOne = visualTransformationOne,
+                        visualTransformationTwo = visualTransformationTwo,
+                        iconOne = iconOne,
+                        onIconOneClicked = onIconOneClicked,
+                        iconTwo = iconTwo,
+                        onIconTwoClicked = onIconTwoClicked,
                         onClick = onSignUpUser)
+
                 }
             }
         }
     }
 
-    @Composable
-    fun EmailSignUpMediumScreen(emailValue: String, onEmailValueChange: (String) -> Unit,
-                                passwordValue: String, onPasswordValueChange: (String) -> Unit,
-                                confirmPasswordValue: String, onConfirmPasswordValueChange: (String) -> Unit,
-                                visualTransformationOne: VisualTransformation, visualTransformationTwo: VisualTransformation,
-                                iconOne: Int, onIconOneClicked:() -> Unit,
-                                iconTwo: Int, onIconTwoClicked:() -> Unit,
-                                onSignUpUser:() -> Unit){
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White)
-            .padding(start = 24.dp, end = 24.dp, top = 12.dp, bottom = 12.dp), verticalArrangement = Arrangement.Center) {
-            TintedColumn(fontSize = 17.sp, horizontalPadding = 80.dp,
-                emailValue = emailValue, onEmailValueChange = onEmailValueChange,
-                passwordValue = passwordValue, onPasswordValueChange = onPasswordValueChange,
-                confirmPasswordValue = confirmPasswordValue, onConfirmPasswordValueChange = onConfirmPasswordValueChange,
-                visualTransformationOne = visualTransformationOne, visualTransformationTwo = visualTransformationTwo,
-                iconOne = iconOne, onIconOneClicked = onIconOneClicked,
-                iconTwo = iconTwo, onIconTwoClicked = onIconTwoClicked,
-                onClick = onSignUpUser)
+@Composable
+fun EmailSignUpMediumScreen(emailValue: String, onEmailValueChange: (String) -> Unit,
+                            passwordValue: String, onPasswordValueChange: (String) -> Unit,
+                            confirmPasswordValue: String, onConfirmPasswordValueChange: (String) -> Unit,
+                            visualTransformationOne: VisualTransformation, visualTransformationTwo: VisualTransformation,
+                            iconOne: Int, onIconOneClicked:() -> Unit,
+                            iconTwo: Int, onIconTwoClicked:() -> Unit,
+                            showProgressIndicator: Boolean,
+                            onSignUpUser:() -> Unit){
+
+    Box(modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center){
+        if (showProgressIndicator){
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.White)
+                .padding(start = 24.dp, end = 24.dp, top = 12.dp, bottom = 12.dp), verticalArrangement = Arrangement.Center) {
+                TintedColumn(fontSize = 17.sp,
+                    emailValue = emailValue, onEmailValueChange = onEmailValueChange,
+                    passwordValue = passwordValue, onPasswordValueChange = onPasswordValueChange,
+                    confirmPasswordValue = confirmPasswordValue, onConfirmPasswordValueChange = onConfirmPasswordValueChange,
+                    visualTransformationOne = visualTransformationOne, visualTransformationTwo = visualTransformationTwo,
+                    iconOne = iconOne, onIconOneClicked = onIconOneClicked,
+                    iconTwo = iconTwo, onIconTwoClicked = onIconTwoClicked,
+                    onClick = onSignUpUser)
+            }
+            IndeterminateProgressIndicator(text = "Signing Up", fontSize = 17.sp)
+        }else{
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.White)
+                .padding(start = 24.dp, end = 24.dp, top = 12.dp, bottom = 12.dp), verticalArrangement = Arrangement.Center) {
+                TintedColumn(fontSize = 17.sp,
+                    emailValue = emailValue, onEmailValueChange = onEmailValueChange,
+                    passwordValue = passwordValue, onPasswordValueChange = onPasswordValueChange,
+                    confirmPasswordValue = confirmPasswordValue, onConfirmPasswordValueChange = onConfirmPasswordValueChange,
+                    visualTransformationOne = visualTransformationOne, visualTransformationTwo = visualTransformationTwo,
+                    iconOne = iconOne, onIconOneClicked = onIconOneClicked,
+                    iconTwo = iconTwo, onIconTwoClicked = onIconTwoClicked,
+                    onClick = onSignUpUser)
+            }
         }
     }
+}
 
     @Composable
-    fun TintedColumn(fontSize: TextUnit, horizontalPadding: Dp,
+    fun TintedColumn(fontSize: TextUnit,
                      emailValue: String, onEmailValueChange: (String) -> Unit,
                      passwordValue: String, onPasswordValueChange: (String) -> Unit,
                      confirmPasswordValue: String, onConfirmPasswordValueChange: (String) -> Unit,
@@ -200,14 +243,9 @@ import com.victorkirui.ui.components.IndeterminateProgressIndicator
                      iconTwo: Int, onIconTwoClicked:() -> Unit,
                      onClick: () -> Unit){
         Column(modifier = Modifier
-            .background(
-                color = MaterialTheme.colorScheme.secondaryContainer,
-                shape = RoundedCornerShape(32.dp)
-            )
             .fillMaxWidth()
-            .fillMaxHeight()
-            .padding(horizontalPadding), horizontalAlignment = Alignment.CenterHorizontally) {
-
+            .fillMaxHeight(),
+            horizontalAlignment = Alignment.CenterHorizontally) {
             IllustratorLogo(logo = R.drawable.logo_white_2, paddingTop = 32.dp,
                 heightPercentage = .3f)
 

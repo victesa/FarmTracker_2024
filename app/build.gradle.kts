@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.victorkirui.farmtracker"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -60,10 +60,14 @@ dependencies {
 
     statusBar()
     compose()
-    hilt()
+    daggerHilt()
+    firebase()
+    implementation(project(":core:designsystem"))
     implementation(project(":core:designsystem"))
     implementation(project(":features:authentication"))
     implementation(project(":features:profile"))
+    implementation(project(":features:home"))
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.8.0")

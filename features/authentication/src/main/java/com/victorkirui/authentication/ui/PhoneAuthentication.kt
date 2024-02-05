@@ -1,7 +1,5 @@
 package com.victorkirui.authentication.ui
 
-import android.app.Activity
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,9 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,10 +26,9 @@ import com.joelkanyi.jcomposecountrycodepicker.component.KomposeCountryCodePicke
 import com.victorkirui.ui.IllustratorLogo
 import com.victorkirui.ui.components.GreenButton
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+
 @Composable
-internal fun PhoneAuthenticationRoute(context: Context){
-    val windowWidthSizeClass = calculateWindowSizeClass(activity = context as Activity).widthSizeClass
+internal fun PhoneAuthenticationRoute(windowWidthSizeClass: WindowWidthSizeClass){
 
     PhoneAuthenticationScreen(windowWidthSizeClass = windowWidthSizeClass)
 }

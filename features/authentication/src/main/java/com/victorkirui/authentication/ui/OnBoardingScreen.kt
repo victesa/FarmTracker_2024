@@ -1,8 +1,5 @@
 package com.victorkirui.authentication.ui
 
-import android.app.Activity
-import android.content.Context
-import android.content.res.Resources
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,14 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,14 +26,13 @@ import com.victorkirui.authentication.R
 import com.victorkirui.ui.IllustratorLogo
 import com.victorkirui.ui.TitleParagraph
 import com.victorkirui.ui.components.GreenButton
-import java.io.IOException
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
-internal fun OnBoardingRoute(context: Context, onSignInClicked: () -> Unit, onSignUpClicked: () -> Unit){
-    val widthSizeClass = calculateWindowSizeClass(activity = context as Activity).widthSizeClass
+internal fun OnBoardingRoute(onSignInClicked: () -> Unit,
+                             onSignUpClicked: () -> Unit,
+                             windowWidthSizeClass: WindowWidthSizeClass){
 
-    OnBoardingScreen(widthSizeClass = widthSizeClass, onSignUpClicked = onSignUpClicked, onSignInClicked = onSignInClicked)
+    OnBoardingScreen(widthSizeClass = windowWidthSizeClass, onSignUpClicked = onSignUpClicked, onSignInClicked = onSignInClicked)
 }
 
 @Composable

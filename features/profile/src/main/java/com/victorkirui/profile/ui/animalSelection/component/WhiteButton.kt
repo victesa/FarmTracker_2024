@@ -1,4 +1,4 @@
-package com.victorkirui.profile.ui.addAnimalData.components
+package com.victorkirui.profile.ui.animalSelection.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height

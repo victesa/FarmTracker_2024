@@ -1,9 +1,6 @@
 package com.victorkirui.authentication.ui.emailSignIn
 
-import android.app.Activity
-import android.content.Context
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,22 +13,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,10 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -55,16 +43,14 @@ import com.victorkirui.authentication.ui.component.PasswordTextField
 import com.victorkirui.ui.components.GreenButton
 
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
-internal fun EmailSignInRoute(context: Context,
+internal fun EmailSignInRoute(windowWidthSizeClass: WindowWidthSizeClass,
                               navigateToPhoneAuthenticationScreen: () -> Unit,
                               navigateToSignUpEmail:() -> Unit,
                               viewModel: EmailSignInViewModel = hiltViewModel()){
 
     val emailSignInState by viewModel.uiState.collectAsState()
     val emailSignInEvent = viewModel::onEvent
-    val windowWidthSizeClass = calculateWindowSizeClass(activity = context as Activity).widthSizeClass
 
     EmailSignInScreen(windowWidthSizeClass = windowWidthSizeClass,
         navigateToPhoneAuthenticationScreen = navigateToPhoneAuthenticationScreen,

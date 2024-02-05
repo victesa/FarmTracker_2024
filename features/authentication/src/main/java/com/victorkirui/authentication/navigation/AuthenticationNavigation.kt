@@ -1,6 +1,6 @@
 package com.victorkirui.authentication.navigation
 
-import android.content.Context
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -11,58 +11,59 @@ import com.victorkirui.authentication.ui.OnBoardingRoute
 import com.victorkirui.authentication.ui.PhoneAuthenticationRoute
 import com.victorkirui.authentication.ui.SignUpOptionsRoute
 
-const val onBoardingRoute = "OnBoarding"
-const val signUpOptions = "SignUpOptions"
-const val emailSignInRoute = "EmailSignInScreen"
-const val emailSignUpRoute = "EmailSignUpScreen"
-const val phoneAuthenticationRoute = "PhoneAuthenticationScreen"
-
-fun NavGraphBuilder.authenticationGraph(context: Context,
+fun NavGraphBuilder.authenticationGraph(windowWidthSizeClass: WindowWidthSizeClass,
                                         onSignUpClicked:()-> Unit, onSignInClicked:()-> Unit,
                                         navigateToEmailSignUpScreen:() -> Unit,
                                         navigateToPhoneAuthenticationScreen:() -> Unit,
                                         navigateToEmailSignInScreen:() -> Unit,
                                         navigateToProfileGraph:() -> Unit){
-    navigation(route = "auth", startDestination = onBoardingRoute){
-        composable(route = onBoardingRoute){
-            OnBoardingRoute(context = context, onSignInClicked = onSignInClicked, onSignUpClicked = onSignUpClicked)
+    navigation(route = AuthenticationRoutes.authenticationGraph,
+        startDestination = AuthenticationRoutes.onBoardingRoute){
+        composable(route = AuthenticationRoutes.onBoardingRoute){
+            OnBoardingRoute(onSignInClicked = onSignInClicked,
+                onSignUpClicked = onSignUpClicked,
+                windowWidthSizeClass = windowWidthSizeClass)
         }
 
-        composable(route = signUpOptions){
-            SignUpOptionsRoute(context = context,
+        composable(route = AuthenticationRoutes.signUpOptions){
+            SignUpOptionsRoute(
                 navigateToPhoneAuthenticationScreen = navigateToPhoneAuthenticationScreen,
                 navigateToEmailSignUpScreen = navigateToEmailSignUpScreen,
-                navigateToEmailSignInScreen = navigateToEmailSignInScreen)
+                navigateToEmailSignInScreen = navigateToEmailSignInScreen,
+                windowWidthSizeClass = windowWidthSizeClass)
         }
         
-        composable(route = emailSignInRoute){
-            EmailSignInRoute(context = context, navigateToPhoneAuthenticationScreen = navigateToPhoneAuthenticationScreen, navigateToSignUpEmail = navigateToEmailSignUpScreen
+        composable(route = AuthenticationRoutes.emailSignInRoute){
+            EmailSignInRoute(navigateToPhoneAuthenticationScreen = navigateToPhoneAuthenticationScreen,
+                navigateToSignUpEmail = navigateToEmailSignUpScreen,
+                windowWidthSizeClass = windowWidthSizeClass
             )
         }
         
-        composable(route = emailSignUpRoute){
-            EmailSignUpRoute(context = context, navigateToProfileGraph = navigateToProfileGraph)
+        composable(route = AuthenticationRoutes.emailSignUpRoute){
+            EmailSignUpRoute(navigateToProfileGraph = navigateToProfileGraph,
+                windowWidthSizeClass = windowWidthSizeClass)
         }
         
-        composable(route = phoneAuthenticationRoute){
-            PhoneAuthenticationRoute(context = context)
+        composable(route = AuthenticationRoutes.phoneAuthenticationRoute){
+            PhoneAuthenticationRoute(windowWidthSizeClass = windowWidthSizeClass)
         }
     }
 }
 
 fun NavController.navigateToSignUpOptionsScreen(){
-    navigate(signUpOptions)
+    navigate(AuthenticationRoutes.signUpOptions)
     saveState()
 }
 
 fun NavController.navigateToEmailSignInScreen(){
-    navigate(emailSignInRoute)
+    navigate(AuthenticationRoutes.emailSignInRoute)
 }
 
 fun NavController.navigateToEmailSignUpScreen(){
-    navigate(emailSignUpRoute)
+    navigate(AuthenticationRoutes.emailSignUpRoute)
 }
 
 fun NavController.navigateToPhoneAuthenticationScreen(){
-    navigate(phoneAuthenticationRoute)
+    navigate(AuthenticationRoutes.phoneAuthenticationRoute)
 }
