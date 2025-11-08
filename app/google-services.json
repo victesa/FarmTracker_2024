@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "185429272509",
+    "project_id": "farmtracker-e4e74",
+    "storage_bucket": "farmtracker-e4e74.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:185429272509:android:020bc8fffa2566b485d4d4",
+        "android_client_info": {
+          "package_name": "com.victorkirui.farmtracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkR5scA0_ZTQlgkkDKB32kk85xtao6br8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
