@@ -1,4 +1,4 @@
-# Farm Tracker 🚜
+.# Farm Tracker 🚜
 
 ![Kotlin](https://img.shields.io/badge/kotlin-%237F52FF.svg?style=for-the-badge&logo=kotlin&logoColor=white)
 ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-%234285F4.svg?style=for-the-badge&logo=android&logoColor=white)
